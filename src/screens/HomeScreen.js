@@ -11,6 +11,7 @@ import {
   View,
   Button
 } from 'react-native';
+import userStore from './../stores/user_store'
 
 export default class HomeScreen extends Component<{}> {
   static navigationOptions = ({ navigation }) => ({
@@ -23,6 +24,8 @@ export default class HomeScreen extends Component<{}> {
       <View style={styles.container}>
         <Text style={styles.text}>
             HomeScreen
+            {userStore.token}
+            {userStore.first_name}
         </Text>        
       </View>
     );

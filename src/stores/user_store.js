@@ -1,4 +1,4 @@
-import { action, observable } from 'mobx'
+import { computed, action, observable } from 'mobx'
 
 class UserStore {
     
@@ -17,6 +17,19 @@ class UserStore {
         this.token = user.auth_token
         this.isLoggedIn = true
     }
+
+    @action clear() {
+        this.email = ''
+        this.first_name = ''
+        this.last_name = ''
+        this.admin = ''
+        this.token = ''
+        this.isLoggedIn = false
+    }
+
+    // @computed get loggedIn() {
+    //     return this.isLoggedIn;
+    // }
 }
 
 const userStore = new UserStore();

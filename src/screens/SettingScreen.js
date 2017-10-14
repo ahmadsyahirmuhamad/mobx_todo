@@ -11,6 +11,9 @@ import {
   View,
   Button
 } from 'react-native';
+import ButtonElement from './components/buttons/Button'
+
+import { userLogout } from './../actions/user_actions'
 
 export default class SettingScreen extends Component<{}> {
   static navigationOptions = ({ navigation }) => ({
@@ -18,12 +21,23 @@ export default class SettingScreen extends Component<{}> {
     headerLeft:  <Button onPress={() => navigation.navigate('DrawerOpen')} title="Open" />
   });
 
+  logout() {
+    userLogout()
+      .then((response) => {
+        alert('safely logout')
+      }).catch((err) => {
+        alert('error')
+      })
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>
-            SettingScreen
-        </Text>        
+        <ButtonElement
+          title="Logout"
+          color="red"
+          handleAction={() => this.logout()}
+        />
       </View>
     );
   }
@@ -35,10 +49,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
-  text: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
   },
 });

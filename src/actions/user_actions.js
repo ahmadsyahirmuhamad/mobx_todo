@@ -15,6 +15,12 @@ function userLogin(email, password) {
         }).catch(error => error)
 }
 
+async function userLogout() {
+    await storage.removeItem('token')
+    await userStore.clear()
+    return true
+}
+
 function getUser() {
     const payload = { query: `{ user { email first_name last_name full_name auth_token errors } }` }
     return api.graphql(payload)
@@ -28,4 +34,4 @@ function getUser() {
         }).catch(error => error)
 }
 
-export { userLogin, getUser }
+export { userLogin, getUser, userLogout }

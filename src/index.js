@@ -8,11 +8,13 @@ import React, { Component } from 'react';
 import {
   ActivityIndicator
 } from 'react-native';
+import { observer } from 'mobx-react/native'
 import { createRootNavigator } from './routes/index.js';
 import storage from './services/Storage'
 import userStore from './stores/user_store'
 import { getUser } from './actions/user_actions'
 
+@observer
 export default class App extends Component<{}> {
   constructor(props) {
     super(props)
@@ -24,9 +26,11 @@ export default class App extends Component<{}> {
   componentWillMount() {
     storage.getItem('token')
       .then(async (token) => {
-        userStore.token = token
-        userStore.isLoggedIn = true
-        await getUser()
+        if ( token !== undefined && token !== null) {
+          userStore.token = token
+          userStore.isLoggedIn = true
+          await getUser()
+        }
         this.setState({ isLoading: false })
       }).catch((err) => {
         console.log('error')

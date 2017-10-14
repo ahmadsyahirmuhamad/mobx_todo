@@ -19,11 +19,11 @@ export default class Button extends Component<{}> {
     }
 
     render() {
-        const { title, color, login } = this.props
+        const { title, color, handleAction } = this.props
         return (
             <TouchableOpacity
                 style={[styles.buttonStyle, { backgroundColor: color }]}
-                onPress={login} >
+                onPress={handleAction} >
                 <Text style={styles.buttonText}>
                     {title}
                 </Text>

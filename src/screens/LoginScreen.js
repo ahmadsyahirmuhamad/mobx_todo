@@ -57,7 +57,7 @@ export default class LoginScreen extends Component<{}> {
         <Button
           title="Login"
           color="blue"
-          login={() => this.login(this.state)}
+          handleAction={() => this.login(this.state)}
         />
       </View>
     );
