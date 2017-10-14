@@ -16,9 +16,12 @@ import TodoListScreen from './../screens/TodoListScreen';
 const UnauthorizedNav = StackNavigator({
   Login: { screen: LoginScreen },
   Register: { screen: RegisterScreen },
+},
+{
+  headerMode: 'none',
 });
 
-const ProfileNav = DrawerNavigator({
+const DrawerNav = DrawerNavigator({
   Home: { screen: HomeScreen },
   Profile: { screen: ProfileScreen },
   Setting: { screen: SettingScreen },
@@ -27,10 +30,13 @@ const ProfileNav = DrawerNavigator({
 const TodoNav = StackNavigator({
   Todo: { screen: TodoScreen },
   TodoList: { screen: TodoListScreen },
+},
+{
+  headerMode: 'none',
 });
 
 const AuthorizedNav = TabNavigator({
-  Home: { screen: ProfileNav },
+  Home: { screen: DrawerNav },
   Todo: { screen: TodoNav },
 });
 
@@ -41,7 +47,6 @@ export const createRootNavigator = (signedIn = false) => {
       Unauthorized: { screen: UnauthorizedNav },
     },
     {
-      headerMode: 'none',
       mode: 'modal',
       initialRouteName: signedIn ? 'Authorized' : 'Unauthorized',
     },

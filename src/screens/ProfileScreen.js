@@ -8,10 +8,16 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
-  View
+  View,
+  Button
 } from 'react-native';
 
 export default class ProfileScreen extends Component<{}> {
+  static navigationOptions = ({ navigation }) => ({
+    title: `Profile`,
+    headerLeft:  <Button onPress={() => navigation.navigate('DrawerOpen')} title="Open" />
+  });
+
   render() {
     return (
       <View style={styles.container}>
