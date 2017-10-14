@@ -1,6 +1,8 @@
+import { AsyncStorage } from 'react-native';
+
 class Storage {
 
-    setItem(key, payload){
+    async setItem(key, payload){
         try {
             await AsyncStorage.setItem(key, payload);
         } catch (error) {
@@ -8,19 +10,20 @@ class Storage {
         }
     }
 
-    getItem(key){
+    async getItem(key){
         try {
             const value = await AsyncStorage.getItem(key);
             if (value !== null){
                 // We have data!!
-                console.log(value);
+                // console.log(value);
+                return value
             }
             } catch (error) {
                 // Error retrieving data
         }
     }
 
-    removeItem(key) {
+    async removeItem(key) {
         try {
             await AsyncStorage.removeItem(key);
         } catch (error) {

@@ -3,7 +3,7 @@ import userStore from './../stores/user_store'
 
 
 const config = {
-    baseUri: 'http://10.0.2.2:3000', // development 
+    baseUri: 'http://localhost:3000', // development 
     timeout: 30000,    
 }
 
@@ -20,8 +20,8 @@ class Api {
     }
 
     graphql(payload) {
-        const header = { headers: { Authorization: `Bearer ${userStore.token}` } }        
-        return this.api.post('/graphql', payload, header)
+        const header = { headers: { Authorization: `${userStore.token}` } }        
+        return this.api.post('/api/users/graphql', payload, header)
     }
 
     // check for request status
