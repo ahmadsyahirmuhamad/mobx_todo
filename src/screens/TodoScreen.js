@@ -11,19 +11,43 @@ import {
   View,
   Button
 } from 'react-native';
+import { NavigationActions } from 'react-navigation'
+
 
 export default class TodoScreen extends Component<{}> {
   static navigationOptions = ({ navigation }) => ({
     title: `Todo`,
-    headerLeft:  <Button onPress={() => navigation.navigate('DrawerOpen')} title="Open" />
+    headerLeft:  <Button onPress={() => navigation.dispatch(NavigationActions.back())} title="Back" />
   });
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      id: '',
+      title: ''
+    }
+  }
+
+  componentWillMount() {
+    this.query()
+  }
+
+  query() {
+    const { id, title } = this.props.navigation.state.params
+    // fetch subtodolist based on id
+    // store to setstate
+    this.setState({ id, title })
+  }
+
+  // render flatlist of subtodo
 
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.text}>
             TodoScreen
-        </Text>        
+            { this.state.title }
+        </Text>
       </View>
     );
   }

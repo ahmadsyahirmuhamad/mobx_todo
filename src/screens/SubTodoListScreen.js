@@ -14,23 +14,25 @@ import {
   Dimensions,
   Button,
 } from 'react-native';
-import { observer } from 'mobx-react/native'
-import { fetchTodos } from './../actions/todo_actions'
-import todoStore from './../stores/todo_store'
+import { NavigationActions } from 'react-navigation'
+import { fetchSubTodos } from './../actions/sub_todo_actions'
 import TodoListRow from './components/lists/TodoListRow'
+import subTodoStore from './../stores/sub_todo_store'
 
-@observer
-export default class TodoListScreen extends Component<{}> {
+
+export default class SubTodoListScreen extends Component<{}> {
   static navigationOptions = ({ navigation }) => ({
-    title: `TodoList`,
-    headerLeft:  <Button onPress={() => navigation.navigate('DrawerOpen')} title="Open" />
+    title: `SubTodoList`,
+    headerLeft:  <Button onPress={() => navigation.dispatch(NavigationActions.back())} title="Back" />
   });
 
   constructor(props) {
     super(props)
     this.state = {
-      error: false,
-      items: []
+        id: '',
+        title: '',
+        items: [],
+        error: false,
     }
   }
 
@@ -38,9 +40,11 @@ export default class TodoListScreen extends Component<{}> {
     this.query()
   }
 
-  // fetch todos and set it to state
+  // fetch sub todos and set it to state
   query() {
-    fetchTodos()
+    const { id, title } = this.props.navigation.state.params
+    this.setState({ id, title })
+    fetchSubTodos(id)
       .then((response) => {
         if (response) {
           this.setState({ items: response, error: false })
@@ -61,7 +65,7 @@ export default class TodoListScreen extends Component<{}> {
   renderNoMessage() {
     return (
       <Text style={styles.text}>
-        No Todo's Yet
+        No Sub Todo's Yet
       </Text>        
     )
   }
@@ -69,13 +73,14 @@ export default class TodoListScreen extends Component<{}> {
   // render list screen
   renderList() {
     return (
-      <View>
-        <FlatList
-          data={this.state.items}
-          keyExtractor={this._keyExtractor}
-          renderItem={({item}) => this._renderItem(item)}
-        />
-      </View>
+        <View>
+            <Text style={styles.text}> {this.state.title} </Text>        
+            <FlatList
+                data={this.state.items}
+                keyExtractor={this._keyExtractor}
+                renderItem={({item}) => this._renderItem(item)}
+            />
+        </View>
     )
   }
   
@@ -94,7 +99,7 @@ export default class TodoListScreen extends Component<{}> {
 
   // render todo detail page
   _gotoTodo = (item) => {
-    this.props.navigation.navigate('SubTodoList', {id: item.node.id, title: item.node.title})
+    this.props.navigation.navigate('Todo', {id: item.node.id, title: item.node.title})
   }
 
   render() {

@@ -11,6 +11,7 @@ import ProfileScreen from './../screens/ProfileScreen';
 import SettingScreen from './../screens/SettingScreen';
 import TodoScreen from './../screens/TodoScreen';
 import TodoListScreen from './../screens/TodoListScreen';
+import SubTodoListScreen from './../screens/SubTodoListScreen';
 
 
 const UnauthorizedNav = StackNavigator({
@@ -28,8 +29,9 @@ const DrawerNav = DrawerNavigator({
 });
 
 const TodoNav = StackNavigator({
-  Todo: { screen: TodoScreen },
   TodoList: { screen: TodoListScreen },
+  SubTodoList: { screen: SubTodoListScreen },
+  Todo: { screen: TodoScreen },
 },
 {
   headerMode: 'none',

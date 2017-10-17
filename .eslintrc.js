@@ -1,4 +1,4 @@
-{
+module.exports = {
     "extends": "airbnb",
     "parser": "babel-eslint",
     "parserOptions": {
@@ -23,4 +23,4 @@
         "class-methods-use-this": 0,
         "semi": 0
     }
-}
+};

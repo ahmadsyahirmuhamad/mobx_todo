@@ -13,6 +13,7 @@ import { createRootNavigator } from './routes/index.js';
 import storage from './services/Storage'
 import userStore from './stores/user_store'
 import { getUser } from './actions/user_actions'
+import { fetchTodos } from './actions/todo_actions'
 
 @observer
 export default class App extends Component<{}> {
