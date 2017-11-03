@@ -11,7 +11,7 @@ import {
   View,
   Button
 } from 'react-native';
-import { createTodo } from './../actions/todo_actions'
+import { createTodo, updateTodo } from './../actions/todo_actions'
 import { NavigationActions } from 'react-navigation'
 import CButton from './components/buttons/Button'
 import InputText from './components/textInputs/InputText'
@@ -26,12 +26,22 @@ export default class TodoScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      id: '',
       title: '',
       description: '',
     }
   }
 
-  addTodo = () => {
+  componentWillMount() {
+    const { params } = this.props.navigation.state
+    this.setState({
+      id: params.id,
+      title: params.title,
+      description: params.description
+    })
+  }
+
+  createTodo = () => {
     createTodo(this.state.title, this.state.description)
       .then((response) => {
         if (response) {
@@ -42,6 +52,36 @@ export default class TodoScreen extends Component {
       }).catch((err) => {
         alert(err)
       })
+  }
+
+  updateTodo = () => {
+    updateTodo(this.state.id, this.state.title, this.state.description)
+      .then((response) => {
+        if (response) {
+          this.props.navigation.navigate('TodoList', {})
+        } else {
+          alert('error')
+        }
+      }).catch((err) => {
+        alert(err)
+      })
+  }
+
+  renderButton() {
+    const { params } = this.props.navigation.state
+    if (params.action === 'UPDATE') {
+      return <CButton
+        title="Update"
+        color="blue"
+        handleAction={() => this.updateTodo()}
+      />
+    } else {
+      return <CButton
+        title="Create"
+        color="blue"
+        handleAction={() => this.createTodo()}
+      />
+    }
   }
 
   render() {
@@ -61,12 +101,7 @@ export default class TodoScreen extends Component {
           placeholder="description"
           secureTextEntry={false}
         />
-        
-        <CButton
-          title="Create"
-          color="blue"
-          handleAction={() => this.addTodo()}
-        />
+        { this.renderButton() }
       </View>
     );
   }

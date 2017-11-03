@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   Dimensions
 } from 'react-native';
+import { deleteTodo } from './../../../actions/todo_actions'
 
 export default class TodoLists extends Component {
     constructor(props) {
@@ -21,7 +22,7 @@ export default class TodoLists extends Component {
 
     // render screen
     renderScreen() {
-        return this.props.items.length > 0 ? this.renderList() : this.renderNoMessage()
+        return this.props.items.length > 0 ? this.renderList() : this.renderNoMessage() 
     }
 
     // render no message if data is empty
@@ -40,7 +41,7 @@ export default class TodoLists extends Component {
             <FlatList
                 data={this.props.items}
                 keyExtractor={this._keyExtractor}
-                renderItem={({item}) => this._renderItem(item)}
+                renderItem={({item, index}) => this._renderItem(item, index)}
             />
         </View>
         )
@@ -50,16 +51,25 @@ export default class TodoLists extends Component {
     _keyExtractor = (item, index) => item.node.id;
     
     // render each row
-    _renderItem = (item) => {
+    _renderItem = (item, index) => {
         return(
             <View style={styles.listView}>
-                <TouchableOpacity onPress={() => this._gotoTodo(item)}>
-                    <View style={styles.listRow} >
-                        <Text>{item.node.title}</Text>
-                        <Text>Click Me!</Text>
-                        <Text>{item.node.description}</Text>
+                <View style={styles.containerList} >
+                    <View style={styles.listRowDetail} >
+                        <Text>{item.node.title} Index{index}</Text>
                     </View>
-                </TouchableOpacity>
+                    <View style={styles.listRowAction} >
+                        <TouchableOpacity onPress={() => this._deleteTodo(item, index)}>
+                            <Text>DELETE</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this._updateTodo(item)}>
+                            <Text>UPDATE</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this._gotoTodo(item)}>
+                            <Text>LIST</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
         )
     }
@@ -72,6 +82,22 @@ export default class TodoLists extends Component {
                 title: item.node.title,
             }
         )
+    }
+    _updateTodo = (item) => {
+        this.props.navigation.navigate('Todo', {
+            action: 'UPDATE',
+            id: item.node.id,
+            title: item.node.title,
+            description: item.node.description
+        })
+    }
+    // delete todo
+    _deleteTodo = async (item, index) => {
+        const response = await deleteTodo(item.node.id)
+        if (response) {
+            // // todo find ways to remove item by index
+            this.props.navigation.navigate('TodoList', {}) // temp solution
+        }
     }
 
     render() {
@@ -89,13 +115,27 @@ const styles = StyleSheet.create({
     listView: {
         width: width * 0.9,
     },
-    listRow: {
+    listRowDetail: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        backgroundColor: 'yellow',
-        padding: 10,
+        backgroundColor: 'pink',
+        padding: 30,
         margin: 5
+    },
+    listRowAction: {
+        flex: 5,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: 'yellow',
+        padding: 30,
+        margin: 5
+    },
+    containerList: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: 'grey',
     },
     text: {
         fontSize: 20,

@@ -58,7 +58,7 @@ export default class TodoListScreen extends Component {
 
   // navigate to new todo 
   _gotoNewTodo = () => {
-    this.props.navigation.navigate('Todo', {})
+    this.props.navigation.navigate('Todo', {action: 'CREATE'})
   }
   
   render() {    
