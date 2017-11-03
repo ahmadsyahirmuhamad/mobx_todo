@@ -14,5 +14,20 @@ function fetchTodos() {
         })
 }
 
+function createTodo(title, description) {
+    const payload = { query: `mutation { createTodo(input: {title: "${title}", description: "${description}"}) { todo { id title description completed created_at updated_at errors } } }` }
+    return api.graphql(payload)
+        .then((response) => {
+            if (response.status === 200 && response.data) {
+                const { todo } = response.data.data.createTodo
+                todoStore.appendTodo(todo)
+                return todo
+            }
+            return []
+        })
+}
 
-export { fetchTodos }
+
+export { fetchTodos, createTodo }
+
+

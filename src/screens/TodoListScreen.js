@@ -9,18 +9,18 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList,
-  TouchableOpacity,
   Dimensions,
   Button,
 } from 'react-native';
+import { NavigationActions } from 'react-navigation'
 import { observer } from 'mobx-react/native'
 import { fetchTodos } from './../actions/todo_actions'
 import todoStore from './../stores/todo_store'
-import TodoListRow from './components/lists/TodoListRow'
+import CButton from './components/buttons/Button'
+import TodoLists from './components/lists/TodoLists'
 
 @observer
-export default class TodoListScreen extends Component<{}> {
+export default class TodoListScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: `TodoList`,
     headerLeft:  <Button onPress={() => navigation.navigate('DrawerOpen')} title="Open" />
@@ -43,7 +43,11 @@ export default class TodoListScreen extends Component<{}> {
     fetchTodos()
       .then((response) => {
         if (response) {
-          this.setState({ items: response, error: false })
+          const todos = todoStore.todosCollection
+          this.setState({ 
+            items: todos,
+            error: false
+          })
         } else {
           this.setState({ error: true })
         }
@@ -52,55 +56,24 @@ export default class TodoListScreen extends Component<{}> {
       })
   }
 
-  // render screen
-  renderScreen() {
-    return this.state.items.length > 0 ? this.renderList() : this.renderNoMessage()
-  }
-
-  // render no message if data is empty
-  renderNoMessage() {
-    return (
-      <Text style={styles.text}>
-        No Todo's Yet
-      </Text>        
-    )
-  }
-
-  // render list screen
-  renderList() {
-    return (
-      <View>
-        <FlatList
-          data={this.state.items}
-          keyExtractor={this._keyExtractor}
-          renderItem={({item}) => this._renderItem(item)}
-        />
-      </View>
-    )
+  // navigate to new todo 
+  _gotoNewTodo = () => {
+    this.props.navigation.navigate('Todo', {})
   }
   
-  // unique key for row's
-  _keyExtractor = (item, index) => item.node.id;
-  
-  // render each row
-  _renderItem = (item) => {
-    return(
-      <TodoListRow
-        item={item}
-        navigateTo={() => this._gotoTodo(item)}
-      />
-    )
-  }
-
-  // render todo detail page
-  _gotoTodo = (item) => {
-    this.props.navigation.navigate('SubTodoList', {id: item.node.id, title: item.node.title})
-  }
-
-  render() {
+  render() {    
     return (
       <View style={styles.container}>
-        {this.renderScreen()}
+        <View style={styles.btnContainer}>
+          <CButton
+            title="Create Todo"
+            color="blue"
+            handleAction={() => this._gotoNewTodo()}
+          />
+        </View>
+        <View style={styles.listContainer}>
+          <TodoLists {...this.state} {...this.props} />
+        </View>
       </View>
     );
   }
@@ -110,13 +83,15 @@ const { width, height, deviceWidth, deviceHeight } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    flexDirection: 'column',
+    width: width * 1.0
   },
-  text: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  btnContainer: {
+    alignItems: 'flex-end',
+    marginTop: 5,
+    padding: 5,
+  },
+  listContainer: {
+    alignItems: 'center',
   },
 });

@@ -11,10 +11,13 @@ import {
   View,
   Button
 } from 'react-native';
+import { createTodo } from './../actions/todo_actions'
 import { NavigationActions } from 'react-navigation'
+import CButton from './components/buttons/Button'
+import InputText from './components/textInputs/InputText'
 
 
-export default class TodoScreen extends Component<{}> {
+export default class TodoScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: `Todo`,
     headerLeft:  <Button onPress={() => navigation.dispatch(NavigationActions.back())} title="Back" />
@@ -23,31 +26,47 @@ export default class TodoScreen extends Component<{}> {
   constructor(props) {
     super(props)
     this.state = {
-      id: '',
-      title: ''
+      title: '',
+      description: '',
     }
   }
 
-  componentWillMount() {
-    this.query()
+  addTodo = () => {
+    createTodo(this.state.title, this.state.description)
+      .then((response) => {
+        if (response) {
+          this.props.navigation.navigate('TodoList', {})
+        } else {
+          alert('error')
+        }
+      }).catch((err) => {
+        alert(err)
+      })
   }
-
-  query() {
-    const { id, title } = this.props.navigation.state.params
-    // fetch subtodolist based on id
-    // store to setstate
-    this.setState({ id, title })
-  }
-
-  // render flatlist of subtodo
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>
-            TodoScreen
-            { this.state.title }
-        </Text>
+        <InputText
+          handleChangeText={(title) => this.setState({title})}
+          value={this.state.title}
+          placeholder="title"
+          secureTextEntry={false}
+          autoCapitalize="none"
+        />
+
+        <InputText
+          handleChangeText={(description) => this.setState({description})}
+          value={this.state.description}
+          placeholder="description"
+          secureTextEntry={false}
+        />
+        
+        <CButton
+          title="Create"
+          color="blue"
+          handleAction={() => this.addTodo()}
+        />
       </View>
     );
   }

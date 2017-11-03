@@ -16,8 +16,8 @@ import {
 } from 'react-native';
 import { NavigationActions } from 'react-navigation'
 import { fetchSubTodos } from './../actions/sub_todo_actions'
-import TodoListRow from './components/lists/TodoListRow'
 import subTodoStore from './../stores/sub_todo_store'
+import SubTodoLists from './components/lists/SubTodoLists'
 
 
 export default class SubTodoListScreen extends Component<{}> {
@@ -56,56 +56,12 @@ export default class SubTodoListScreen extends Component<{}> {
       })
   }
 
-  // render screen
-  renderScreen() {
-    return this.state.items.length > 0 ? this.renderList() : this.renderNoMessage()
-  }
-
-  // render no message if data is empty
-  renderNoMessage() {
-    return (
-      <Text style={styles.text}>
-        No Sub Todo's Yet
-      </Text>        
-    )
-  }
-
-  // render list screen
-  renderList() {
-    return (
-        <View>
-            <Text style={styles.text}> {this.state.title} </Text>        
-            <FlatList
-                data={this.state.items}
-                keyExtractor={this._keyExtractor}
-                renderItem={({item}) => this._renderItem(item)}
-            />
-        </View>
-    )
-  }
-  
-  // unique key for row's
-  _keyExtractor = (item, index) => item.node.id;
-  
-  // render each row
-  _renderItem = (item) => {
-    return(
-      <TodoListRow
-        item={item}
-        navigateTo={() => this._gotoTodo(item)}
-      />
-    )
-  }
-
-  // render todo detail page
-  _gotoTodo = (item) => {
-    this.props.navigation.navigate('Todo', {id: item.node.id, title: item.node.title})
-  }
-
   render() {
     return (
       <View style={styles.container}>
-        {this.renderScreen()}
+        <View style={styles.listContainer}>
+          <SubTodoLists {...this.state} {...this.props}/>
+        </View>
       </View>
     );
   }
@@ -115,13 +71,11 @@ const { width, height, deviceWidth, deviceHeight } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    flexDirection: 'column',
+    width: width * 1.0
   },
-  text: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  listContainer: {
+    alignItems: 'center',
   },
 });
+
