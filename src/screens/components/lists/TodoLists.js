@@ -65,7 +65,7 @@ export default class TodoLists extends Component {
                         <TouchableOpacity onPress={() => this._updateTodo(item)}>
                             <Text>UPDATE</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this._gotoTodo(item)}>
+                        <TouchableOpacity onPress={() => this._gotoSubTodo(item)}>
                             <Text>LIST</Text>
                         </TouchableOpacity>
                     </View>
@@ -75,11 +75,10 @@ export default class TodoLists extends Component {
     }
 
     // render todo detail page
-    _gotoTodo = (item) => {
+    _gotoSubTodo = (item) => {
         this.props.navigation.navigate('SubTodoList',
             {
-                id: item.node.id,
-                title: item.node.title,
+                todo_id: item.node.id
             }
         )
     }

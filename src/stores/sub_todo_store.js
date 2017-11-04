@@ -1,11 +1,23 @@
-import { action, observable } from 'mobx'
+import { action, observable, computed } from 'mobx'
 
 class SubTodoStore {
     
-    @observable todos = []
+    @observable subTodos = []
 
     @action setTodos(items) {
-        this.todos.replace(items)
+        this.subTodos.replace(items)
+    }
+    
+    @action appendSubTodo(item) {
+        this.subTodos.push(item)
+    }
+
+    @computed get subTodoCount() {
+        return this.subTodos.length
+    }
+
+    @computed get SubTodosCollection() {
+        return this.subTodos
     }
 
 }

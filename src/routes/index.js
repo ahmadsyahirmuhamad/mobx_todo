@@ -10,6 +10,7 @@ import HomeScreen from './../screens/HomeScreen';
 import ProfileScreen from './../screens/ProfileScreen';
 import SettingScreen from './../screens/SettingScreen';
 import TodoScreen from './../screens/TodoScreen';
+import SubTodoScreen from './../screens/SubTodoScreen';
 import TodoListScreen from './../screens/TodoListScreen';
 import SubTodoListScreen from './../screens/SubTodoListScreen';
 
@@ -32,6 +33,7 @@ const TodoNav = StackNavigator({
   TodoList: { screen: TodoListScreen },
   SubTodoList: { screen: SubTodoListScreen },
   Todo: { screen: TodoScreen },
+  SubTodo: { screen: SubTodoScreen },
 },
 {
   headerMode: 'none',
